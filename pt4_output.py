@@ -14,12 +14,24 @@ class Pt4Out(file):
 
     def pt4getAveCur(self, sec):
         """取得 n 秒后的平均电流"""
-        '''sublist = copy.deepcopy(self.curlist100[int(sec*100):])
-        print(sublist)
-        print len(sublist)
-        return sum(sublist)/len(sublist)'''
-        return sum(self.curlist100[int(sec)*100:])/(self.curlist100.__len__() - int(sec)*100)
-        
+        return "%.2f" % sum(self.curlist100[int(sec)*100:])/(self.curlist100.__len__() - int(sec)*100)
+    
+    def pt4getAveHighThan(self, curbase):
+        """在电流值高过某个值之后就开始计算平均电流"""
+        for cur in self.curlist100:
+            if cur > int(curbase):
+                pos = self.curlist100.index(cur)
+                return "%.2f" % sum(self.curlist100[pos:])/(self.curlist100.__len__() - pos)
+        return -1
+    
+    def pt4getAveLessThan(self, curbase):
+        """在电流值高过某个值之后就开始计算平均电流"""
+        for cur in self.curlist100:
+            if cur < int(curbase):
+                pos = self.curlist100.index(cur)
+                return "%.2f" % (sum(self.curlist100[pos:])/(self.curlist100.__len__() - pos))
+        return -1
+    
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage: {0} <pt4-file>".format(sys.argv[0]))
@@ -28,6 +40,6 @@ if __name__ == "__main__":
     sec = 0
     if len(sys.argv) == 3:
         sec = sys.argv[2]
-    result = Pt4Out(sys.argv[1]).pt4getAveCur(sec)
+    result = Pt4Out(sys.argv[1]).pt4getAveLessThan(sec)
     print result
     
