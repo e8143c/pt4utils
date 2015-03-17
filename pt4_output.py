@@ -25,4 +25,6 @@ if __name__ == "__main__":
     sec = 0
     if len(sys.argv) == 3:
         sec = sys.argv[2]
-    print Pt4Out(sys.argv[1]).pt4getAveCur(sec)
+    result = Pt4Out(sys.argv[1]).pt4getAveCur(sec)
+    print result
+    
