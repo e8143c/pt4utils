@@ -22,7 +22,7 @@ class resurt:
 			xjh = Pt4Out(BASE_DIR+'\\pt4\\'+case_name[i]+'.pt4')
 			datadic.append([case_name[i],xjh.pt4getAveLessThan(sec)])
 			#print case_name[i],xjh.pt4getAveLessThan(sec)
-			writer.writerows(datadic)
+		writer.writerows(datadic)
 		csvfile.close()
 if __name__ == '__main__':
 	if len(sys.argv) < 2:
