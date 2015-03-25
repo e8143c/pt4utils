@@ -39,6 +39,8 @@ class Pt4Out(file):
             if cur < int(curbase):
                 pos = self.curlist100.index(cur)
                 return "%.2f" % float(sum(self.curlist100[pos:])/(self.curlist100.__len__() - pos))
+                #pos = self.curpersec.index(cur)
+                #return "%.2f" % float(sum(self.curpersec[pos:])/(self.curpersec.__len__() - pos))
         return -1
     
     def pt4getSleepCurNoPeak(self, curbase, duration, startpos=0):
@@ -47,12 +49,12 @@ class Pt4Out(file):
             duration - 统计区间的时常
             startpos - 强制指定跳过的时间长度，弱该项参数指定后，从指定点之后寻找符合curbase要求的点
         """
-        if duration > len(self.curpersec):
-            curl = self.curpersec[:]
+        if duration > len(self.curlist100):
+            curl = self.curlist100[:]
         else:
-            curl = self.curpersec[-1*duration:]
+            curl = self.curlist100[-100*duration:]
             
-        curser = len(self.curpersec) - duration
+        curser = len(self.curlist100) - duration*100
         if startpos > 0 and startpos > curser:
             curl = curl[int(startpos -curser):]
         length = len(curl)
@@ -64,6 +66,8 @@ class Pt4Out(file):
                 ave = sum/(i+1)
                 return "%.2f" % ave
             else:
+                if sec <0:
+                    continue
                 sum += sec
         ave = sum/(length)
         return "%.2f" % ave
@@ -76,6 +80,6 @@ if __name__ == "__main__":
     sec = 0
     if len(sys.argv) == 3:
         sec = sys.argv[2]
-    result = Pt4Out(sys.argv[1]).pt4getSleepCurNoPeak(20,10)
+    result = Pt4Out(sys.argv[1]).pt4getSleepCurNoPeak(5,3)
     print result
     
