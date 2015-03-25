@@ -47,21 +47,26 @@ class Pt4Out(file):
             duration - 统计区间的时常
             startpos - 强制指定跳过的时间长度，弱该项参数指定后，从指定点之后寻找符合curbase要求的点
         """
-        curl = self.curpersec[:]
+        if duration > len(self.curpersec):
+            curl = self.curpersec[:]
+        else:
+            curl = self.curpersec[-1*duration:]
+            
+        curser = len(self.curpersec) - duration
+        if startpos > 0 and startpos > curser:
+            curl = curl[int(startpos -curser):]
         length = len(curl)
         sum = curl.pop()
         ave = 0
-        if startpos > 0:
-            curl = self.curpersec[int(startpos):]
-        for i in range(len(curl)):
+        for i in range(length-1):
             sec = curl.pop()
             if sec >= curbase:
                 ave = sum/(i+1)
-                return ave
+                return "%.2f" % ave
             else:
                 sum += sec
-        ave = sum/(length + 1)
-        return ave
+        ave = sum/(length)
+        return "%.2f" % ave
     
 if __name__ == "__main__":
     if len(sys.argv) < 2:
@@ -71,6 +76,6 @@ if __name__ == "__main__":
     sec = 0
     if len(sys.argv) == 3:
         sec = sys.argv[2]
-    result = Pt4Out(sys.argv[1]).pt4getAveLessThan(sec)
+    result = Pt4Out(sys.argv[1]).pt4getSleepCurNoPeak(20,10)
     print result
     
